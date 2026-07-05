@@ -57,6 +57,8 @@ def plot_representation_comparison(
         Output file path for the saved figure.
     """
     fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+    class_names = ["Malignant", "Benign"]
+
     for ax, data, name in zip(
         axes, (pca, tsne, umap), ("PCA", "t-SNE", "UMAP")
     ):
@@ -64,7 +66,9 @@ def plot_representation_comparison(
         ax.set_title(name)
         ax.set_xlabel("Component 1")
         ax.set_ylabel("Component 2")
-    fig.colorbar(sc, ax=axes.ravel().tolist(), orientation="horizontal", fraction=0.05)
+        ax.legend(handles=sc.legend_elements()[0], labels=["Malignant", "Benign"], loc="best", title="Diagnosis")
+    
+    fig.suptitle("Representation Comparison — True Diagnostic Labels")
     fig.tight_layout()
     fig.savefig(filename)
     plt.close(fig)
@@ -97,7 +101,10 @@ def plot_cluster_comparison(
         ax.set_title(name)
         ax.set_xlabel("Component 1")
         ax.set_ylabel("Component 2")
-    fig.colorbar(sc, ax=axes.ravel().tolist(), orientation="horizontal", fraction=0.05)
+        n_clusters = len(np.unique(cluster_labels))
+        ax.legend(handles=sc.legend_elements()[0], labels=[f"Cluster {i}" for i in range(n_clusters)], loc="best", title="Cluster")
+
+    fig.suptitle("Cluster Comparison — K-Means (k=2)")  
     fig.tight_layout()
     fig.savefig(filename)
     plt.close(fig)
