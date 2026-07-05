@@ -7,7 +7,12 @@ matrix X and return the transformed data.
 
 from typing import Any
 
+
+
 import numpy as np
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
+import umap
 
 
 def apply_pca(X: np.ndarray, n_components: int = 2, random_state: int = 42) -> np.ndarray:
@@ -27,8 +32,8 @@ def apply_pca(X: np.ndarray, n_components: int = 2, random_state: int = 42) -> n
     np.ndarray
         Transformed data with shape (n_samples, n_components).
     """
-    raise NotImplementedError("Implement PCA transformation here")
-
+    pca = PCA(n_components=n_components, random_state=random_state)
+    return pca.fit_transform(X)
 
 def apply_tsne(X: np.ndarray, n_components: int = 2, random_state: int = 42) -> np.ndarray:
     """Apply t-SNE to the data.
@@ -36,8 +41,13 @@ def apply_tsne(X: np.ndarray, n_components: int = 2, random_state: int = 42) -> 
     The sklearn.manifold.TSNE class may be used.  The function should return the
     2‑D embedding.
     """
-    raise NotImplementedError("Implement t-SNE transformation here")
+    tsne = TSNE(
+        n_components=n_components,
+        random_state=random_state,
+        init="pca"
+    )
 
+    return tsne.fit_transform(X)
 
 def apply_umap(X: np.ndarray, n_components: int = 2, random_state: int = 42) -> np.ndarray:
     """Apply UMAP to the data.
@@ -45,4 +55,5 @@ def apply_umap(X: np.ndarray, n_components: int = 2, random_state: int = 42) -> 
     Requires the `umap-learn` package.  Return an array of shape
     (n_samples, n_components).
     """
-    raise NotImplementedError("Implement UMAP transformation here")
+    reducer = umap.UMAP(n_components=n_components, random_state=random_state)
+    return reducer.fit_transform(X)

@@ -8,6 +8,7 @@ labels and any additional information required for plotting or evaluation.
 from typing import Any, Tuple
 
 import numpy as np
+from sklearn.cluster import KMeans, AgglomerativeClustering
 
 
 def run_kmeans(X: np.ndarray, n_clusters: int = 3, random_state: int = 42) -> Tuple[np.ndarray, Any]:
@@ -29,7 +30,10 @@ def run_kmeans(X: np.ndarray, n_clusters: int = 3, random_state: int = 42) -> Tu
     centers : Any
         Object representing cluster centers (e.g. np.ndarray).
     """
-    raise NotImplementedError("Implement k-means here")
+    kmeans = KMeans(n_clusters=n_clusters, random_state=random_state)
+    labels = kmeans.fit_predict(X)
+    centers = kmeans.cluster_centers_
+    return labels, centers
 
 
 def run_hierarchical(X: np.ndarray, n_clusters: int = 3, linkage: str = "ward") -> np.ndarray:
@@ -49,4 +53,6 @@ def run_hierarchical(X: np.ndarray, n_clusters: int = 3, linkage: str = "ward") 
     labels : np.ndarray
         Integer labels for each sample.
     """
-    raise NotImplementedError("Implement hierarchical clustering here")
+    agg = AgglomerativeClustering(n_clusters=n_clusters, linkage=linkage)
+    labels = agg.fit_predict(X)
+    return labels
